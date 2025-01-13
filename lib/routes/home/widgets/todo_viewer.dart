@@ -32,21 +32,27 @@ class TodoViewer extends StatelessWidget {
               size: 28,
               color: todo.done ? Colors.green.shade200 : Colors.red.shade200,
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  todo.title,
-                  style: TextStyle(fontSize: 17, color: Colors.white),
-                ),
-                todo.description != null
-                    ? Text(
-                        todo.description ?? '',
-                        style: TextStyle(fontSize: 13, color: Colors.grey),
-                      )
-                    : SizedBox.shrink()
-              ],
+            SizedBox(
+              width: MediaQuery.sizeOf(context).width * 0.75,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    todo.title,
+                    style: TextStyle(fontSize: 17, color: Colors.white),
+                    overflow: TextOverflow.clip,
+                  ),
+                  todo.description != null
+                      ? Text(
+                          todo.description ?? '',
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          style: TextStyle(fontSize: 13, color: Colors.grey),
+                        )
+                      : SizedBox.shrink()
+                ],
+              ),
             ),
           ],
         ),

@@ -2,6 +2,12 @@
 
 Create and manage your To-do easily
 
+## Screenshots
+
+![Screenshot 02](assets/demos/02.jpg)
+![Screenshot 01](assets/demos/01.jpg)
+![Screenshot 03](assets/demos/03.jpg)
+
 ## Features
 
 [x] Add, edit, and delete tasks  

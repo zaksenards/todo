@@ -34,18 +34,18 @@ class _TodoEditorState extends State<TodoEditor> {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(
-          top: 30,
-          left: 30.0,
-          right: 30,
-          bottom: MediaQuery.of(context).viewInsets.bottom),
+        top: 30,
+        left: 30.0,
+        right: 30,
+        bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+      ),
       child: Form(
         key: _formKey,
-        child: SizedBox(
-          height: MediaQuery.sizeOf(context).height * 0.3,
-          child: Column(
-            spacing: 30,
-            children: [
-              TextFormField(
+        child: Column(
+          spacing: 30,
+          children: [
+            SizedBox(
+              child: TextFormField(
                 autocorrect: false,
                 controller: titleController,
                 decoration: InputDecoration(
@@ -66,27 +66,27 @@ class _TodoEditorState extends State<TodoEditor> {
                   return null;
                 },
               ),
-              TextField(
-                autocorrect: false,
-                controller: descriptionController,
-                decoration: InputDecoration(
-                  label: Text("Description"),
-                  filled: true,
-                  border: OutlineInputBorder(),
-                ),
+            ),
+            TextField(
+              autocorrect: false,
+              controller: descriptionController,
+              decoration: InputDecoration(
+                label: Text("Description"),
+                filled: true,
+                border: OutlineInputBorder(),
               ),
-              FilledButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    widget.onSaveListenner(widget.model?.id,
-                        titleController.text, descriptionController.text, done);
-                    Navigator.of(context).pop();
-                  }
-                },
-                child: Text("Save"),
-              )
-            ],
-          ),
+            ),
+            FilledButton(
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  widget.onSaveListenner(widget.model?.id, titleController.text,
+                      descriptionController.text, done);
+                  Navigator.of(context).pop();
+                }
+              },
+              child: Text("Save"),
+            )
+          ],
         ),
       ),
     );

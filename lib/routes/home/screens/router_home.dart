@@ -33,6 +33,7 @@ class _RouterHomeState extends State<RouterHome> {
   Future<void> onPressFAB(TodoModel? model) async {
     showModalBottomSheet(
       showDragHandle: true,
+      isScrollControlled: true,
       context: context,
       builder: (context) {
         return SingleChildScrollView(
@@ -85,6 +86,7 @@ class _RouterHomeState extends State<RouterHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,      
       appBar: AppBar(
         elevation: 2,
         leading: Icon(Icons.tornado_rounded),
