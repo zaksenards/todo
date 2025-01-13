@@ -4,9 +4,11 @@ Create and manage your To-do easily
 
 ## Screenshots
 
-![Screenshot 02](assets/demos/02.jpg)
-![Screenshot 01](assets/demos/01.jpg)
-![Screenshot 03](assets/demos/03.jpg)
+<div style="display: flex; flex-direction: row; justify-content: space-around;">
+    <img src="https://raw.githubusercontent.com/zaksenards/todo/master/assets/demo/01.png" alt="Screenshot 01" style="width: 30%;">
+    <img src="https://raw.githubusercontent.com/zaksenards/todo/master/assets/demo/02.png" alt="Screenshot 02" style="width: 30%;">
+    <img src="https://raw.githubusercontent.com/zaksenards/todo/master/assets/demo/03.png" alt="Screenshot 03" style="width: 30%;">
+</div>
 
 ## Features
 
