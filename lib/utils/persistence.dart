@@ -18,15 +18,6 @@ class Persistence extends ChangeNotifier {
     return _singleton;
   }
 
-  void onDatabaseUpgrade(db, oldVersion, newVersion) {
-    db.execute("ALTER TABLE todo RENAME TO todo_old");
-    onDatabaseCreateV2(db, newVersion);
-    db.execute(
-      "INSERT INTO todo (id, title, description, done) SELECT id, title, description, done FROM todo_old",
-    );
-    db.execute("DROP TABLE todo_old");
-  }
-
   void onDatabaseCreateV1(db, version) {
     /**
        * @brief: Creates a table to store the user's todo data
@@ -72,6 +63,15 @@ class Persistence extends ChangeNotifier {
           done INTEGER NOT NULL,
           UNIQUE(id))''',
     );
+  }
+
+  void onDatabaseUpgrade(db, oldVersion, newVersion) {
+    db.execute("ALTER TABLE todo RENAME TO todo_old");
+    onDatabaseCreateV2(db, newVersion);
+    db.execute(
+      "INSERT INTO todo (id, title, description, done) SELECT id, title, description, done FROM todo_old",
+    );
+    db.execute("DROP TABLE todo_old");
   }
 
   /**
