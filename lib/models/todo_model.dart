@@ -13,7 +13,12 @@ class TodoModel {
    * 
    */
   Map<String, Object?> toJson() {
-    return {'id': id, 'title': title, 'description': description, 'done': done};
+    return {
+      'id': id,
+      'title': title,
+      'description': description,
+      'done': done ? 1 : 0
+    };
   }
 
   static TodoModel fromJson(Map<String, Object?>? data) {

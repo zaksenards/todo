@@ -24,7 +24,7 @@ class Persistence extends ChangeNotifier {
   Future<void> initialize() async {
     if (_db == null) {
       final String dbPath = await getDatabasesPath();
-      _db = await openDatabase(join(dbPath, "todo.db"));
+      _db = await openDatabase(join(dbPath, "todo.db"), version: 1);
 
       /**
        * @brief: Creates a table to store the user's todo data
