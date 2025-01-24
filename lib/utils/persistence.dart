@@ -18,15 +18,17 @@ class Persistence extends ChangeNotifier {
     return _singleton;
   }
 
-  /**
-   * Initializes the application database if nedded
-   */
-  Future<void> initialize() async {
-    if (_db == null) {
-      final String dbPath = await getDatabasesPath();
-      _db = await openDatabase(join(dbPath, "todo.db"));
+  void onDatabaseUpgrade(db, oldVersion, newVersion) {
+    db.execute("ALTER TABLE todo RENAME TO todo_old");
+    onDatabaseCreateV2(db, newVersion);
+    db.execute(
+      "INSERT INTO todo (id, title, description, done) SELECT id, title, description, done FROM todo_old",
+    );
+    db.execute("DROP TABLE todo_old");
+  }
 
-      /**
+  void onDatabaseCreateV1(db, version) {
+    /**
        * @brief: Creates a table to store the user's todo data
        * 
        * @id: Todo's unique identifier.
@@ -35,9 +37,54 @@ class Persistence extends ChangeNotifier {
        * 
        * @description: Todo's description
        * 
+       * @done: Todo's status
+       * 
        */
-      _db!.execute(
-        "CREATE TABLE IF NOT EXISTS todo(id INTEGER PRIMARY KEY, title NVARCHAR NOT NULL, description NVARCHAR, done INTEGER NOT NULL, UNIQUE(id))",
+    db.execute(
+      '''CREATE TABLE IF NOT EXISTS todo(
+          id INTEGER PRIMARY KEY,
+          title NVARCHAR NOT NULL,
+          description NVARCHAR,
+          done INTEGER NOT NULL,
+          UNIQUE(id))''',
+    );
+  }
+
+  void onDatabaseCreateV2(db, version) {
+    /**
+       * @brief: Creates a table to store the user's todo data
+       * 
+       * @id: Todo's unique identifier.
+       * 
+       * @title: Todo's title
+       * 
+       * @description: Todo's description
+       * 
+       * @body: Todo's body
+       * 
+       */
+    db.execute(
+      '''CREATE TABLE IF NOT EXISTS todo(
+          id INTEGER PRIMARY KEY,
+          title NVARCHAR NOT NULL,
+          description NVARCHAR,
+          body NVARCHAR,
+          done INTEGER NOT NULL,
+          UNIQUE(id))''',
+    );
+  }
+
+  /**
+   * Initializes the application database if nedded
+   */
+  Future<void> initialize() async {
+    if (_db == null) {
+      final String dbPath = await getDatabasesPath();
+      _db = await openDatabase(
+        join(dbPath, "todo.db"),
+        onCreate: onDatabaseCreateV2,
+        onUpgrade: onDatabaseUpgrade,
+        version: 2,
       );
     }
     await _reloadTodos();
@@ -53,9 +100,13 @@ class Persistence extends ChangeNotifier {
    * 
    */
   Future<void> insertRawTodo(
-      {required String title, String? description, required bool done}) async {
+      {required String title,
+      String? description,
+      String? body,
+      required bool done}) async {
     insertTodo(
-      todo: TodoModel(title: title, description: description, done: done),
+      todo: TodoModel(
+          title: title, description: description, body: body, done: done),
     );
   }
 
@@ -68,10 +119,16 @@ class Persistence extends ChangeNotifier {
       {required int id,
       required String title,
       String? description,
+      String? body,
       required bool done}) async {
     _db!.update(
         'todo',
-        TodoModel(id: id, title: title, description: description, done: done)
+        TodoModel(
+                id: id,
+                title: title,
+                description: description,
+                body: body,
+                done: done)
             .toJson(),
         where: 'id==?',
         whereArgs: [id]);

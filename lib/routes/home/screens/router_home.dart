@@ -37,6 +37,7 @@ class _RouterHomeState extends State<RouterHome> {
       context: context,
       builder: (context) {
         return SingleChildScrollView(
+          scrollDirection: Axis.vertical,
           child: TodoEditor(
             onSaveListenner: onSaveListenner,
             model: model,
@@ -47,15 +48,19 @@ class _RouterHomeState extends State<RouterHome> {
   }
 
   Future<void> onSaveListenner(
-      int? id, String title, String description, bool done) async {
+      int? id, String title, String description, String body, bool done) async {
     if (id != null) {
       await _instance.updateRawTodo(
-          id: id, description: description, title: title, done: done);
+          id: id,
+          title: title,
+          description: description,
+          body: body,
+          done: done);
       return;
     }
 
     await _instance.insertRawTodo(
-        title: title, description: description, done: done);
+        title: title, description: description, body: body, done: done);
   }
 
   void showDeletionDialog(TodoModel model) {
@@ -86,7 +91,7 @@ class _RouterHomeState extends State<RouterHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,      
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         elevation: 2,
         leading: Icon(Icons.tornado_rounded),

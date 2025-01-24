@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todo/models/todo_model.dart';
 
-typedef OnSaveListenner = Function(int?, String, String, bool);
+typedef OnSaveListenner = Function(int?, String, String, String, bool);
 
 class TodoEditor extends StatefulWidget {
   const TodoEditor({super.key, required this.onSaveListenner, this.model});
@@ -15,6 +15,7 @@ class TodoEditor extends StatefulWidget {
 class _TodoEditorState extends State<TodoEditor> {
   TextEditingController descriptionController = TextEditingController();
   TextEditingController titleController = TextEditingController();
+  TextEditingController bodyController = TextEditingController();
 
   bool done = false;
   final _formKey = GlobalKey<FormState>();
@@ -25,6 +26,7 @@ class _TodoEditorState extends State<TodoEditor> {
 
     if (widget.model != null) {
       descriptionController.text = widget.model!.description ?? "";
+      bodyController.text = widget.model!.body ?? "";
       titleController.text = widget.model!.title;
       done = widget.model!.done;
     }
@@ -76,11 +78,23 @@ class _TodoEditorState extends State<TodoEditor> {
                 border: OutlineInputBorder(),
               ),
             ),
+            SizedBox(
+              height: 200,
+              child: TextField(
+                controller: bodyController,
+                maxLines: 20,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              ),
+            ),
             FilledButton(
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
                   widget.onSaveListenner(widget.model?.id, titleController.text,
-                      descriptionController.text, done);
+                      descriptionController.text, bodyController.text, done);
                   Navigator.of(context).pop();
                 }
               },
